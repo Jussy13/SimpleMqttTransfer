@@ -27,28 +27,27 @@ namespace MqttPublisher.Services
             _mqttClient.ApplicationMessageReceivedHandler = this;
         }
 
-        public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs)
-            =>
-                await Task.Run(() =>
+        public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs) =>
+            await Task.Run(() =>
+            {
+                try
                 {
-                    try
+                    string topic = eventArgs.ApplicationMessage.Topic;
+                    if (string.IsNullOrWhiteSpace(topic) == false)
                     {
-                        string topic = eventArgs.ApplicationMessage.Topic;
-                        if (string.IsNullOrWhiteSpace(topic) == false)
-                        {
-                            var payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
-                            Console.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
-                            Console.WriteLine($"+ Topic = {eventArgs.ApplicationMessage.Topic}");
-                            Console.WriteLine($"+ Payload = {payload}");
-                            Console.WriteLine($"+ QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel}");
-                            Console.WriteLine($"+ Retain = {eventArgs.ApplicationMessage.Retain}");
-                        }
+                        var payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
+                        Console.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
+                        Console.WriteLine($"+ Topic = {eventArgs.ApplicationMessage.Topic}");
+                        Console.WriteLine($"+ Payload = {payload}");
+                        Console.WriteLine($"+ QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel}");
+                        Console.WriteLine($"+ Retain = {eventArgs.ApplicationMessage.Retain}");
                     }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.Message, ex);
-                    }
-                });
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message, ex);
+                }
+            });
 
         public async Task HandleConnectedAsync(MqttClientConnectedEventArgs eventArgs)
         {
@@ -64,9 +63,8 @@ namespace MqttPublisher.Services
             });
         }
 
-        public async Task HandleDisconnectedAsync(MqttClientDisconnectedEventArgs eventArgs)
-            =>
-                await Task.Run(() => Console.WriteLine("disconnected"));
+        public async Task HandleDisconnectedAsync(MqttClientDisconnectedEventArgs eventArgs) =>
+            await Task.Run(() => Console.WriteLine("disconnected"));
 
 
         public async Task StartAsync() => await _mqttClient.StartAsync(_options);
@@ -88,14 +86,13 @@ namespace MqttPublisher.Services
                     .Build()
             );
 
-        public async Task SubscribeAsync(string topic, int qos = 1)
-            =>
-                await _mqttClient.SubscribeAsync(
-                    new MqttTopicFilter()
-                    {
-                        Topic = topic,
-                        QualityOfServiceLevel = (MQTTnet.Protocol.MqttQualityOfServiceLevel)qos
-                    }
-                );
+        public async Task SubscribeAsync(string topic, int qos = 1) =>
+            await _mqttClient.SubscribeAsync(
+                new MqttTopicFilter()
+                {
+                    Topic = topic,
+                    QualityOfServiceLevel = (MQTTnet.Protocol.MqttQualityOfServiceLevel)qos
+                }
+            );
     }
 }

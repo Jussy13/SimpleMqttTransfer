@@ -1,4 +1,7 @@
+using System.Linq;
+using Database.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 
 namespace MqttClient
@@ -7,7 +10,11 @@ namespace MqttClient
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            ApplyMigrations(host.Services.GetService(typeof(CalculationContext)) as CalculationContext);
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -16,5 +23,13 @@ namespace MqttClient
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+        private static void ApplyMigrations(CalculationContext context)
+        {
+            if (context.Database.GetPendingMigrations().Any())
+            {
+                context.Database.Migrate();
+            }
+        }
     }
 }

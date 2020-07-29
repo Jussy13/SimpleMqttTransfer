@@ -1,5 +1,8 @@
+using System;
+using Database.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MqttClient.Extensions;
@@ -39,6 +42,10 @@ namespace MqttClient
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<CalculationContext>(
+                CreateCalculationContext(_configuration),
+                ServiceLifetime.Singleton
+            );
             services.AddMqttClientHostedService();
             services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddCors();
@@ -53,6 +60,17 @@ namespace MqttClient
                 .AllowAnyMethod()
             );
             app.UseMvc();
+        }
+
+        private Action<DbContextOptionsBuilder> CreateCalculationContext(IConfiguration configuration)
+        {
+            return (optionsBuilder) =>
+            {
+                optionsBuilder
+                    .UseNpgsql(
+                        configuration.GetConnectionString("db"),
+                        options => options.EnableRetryOnFailure(3));
+            };
         }
     }
 }

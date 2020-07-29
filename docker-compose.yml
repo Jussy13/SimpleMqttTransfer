@@ -1,0 +1,27 @@
+﻿version: "3"
+
+services:
+  db:
+    image: library/postgres:10.5-alpine
+    environment:
+      POSTGRES_DB: mqtt
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: user
+    ports:
+      - 55432:5432
+    volumes:
+      - ./postgresql:/etc/postgresql:ro
+
+  pollutant-rest:
+    image: hivemq/hivemq4:latest
+    ports:
+      - 8080:8080
+      - 1883:1883
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  data:
+    driver: local

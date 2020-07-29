@@ -14,11 +14,13 @@ namespace MqttPublisher
 
             mqttClient.StartAsync();
 
-            while (true)
-            {
-                mqttClient.PublishAsync("Info from Publisher");
-                Task.Delay(TimeSpan.FromSeconds(15));
-            }
+            mqttClient.PublishAsync("Info from Publisher");
+            // while (true)
+            // {
+            //     Task.Delay(TimeSpan.FromSeconds(15));
+            // }
+
+            Console.ReadLine();
         }
 
         private static IServiceCollection CreateServiceCollection() => new Startup().ConfigureServices();
