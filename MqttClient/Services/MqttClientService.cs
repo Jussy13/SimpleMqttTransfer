@@ -48,7 +48,14 @@ namespace MqttClient.Services
                         Console.WriteLine($"+ QoS = {qos}");
                         Console.WriteLine($"+ Retain = {retain}");
 
-                        var message = new Message(){Topic = topic, Payload = payload, Qos = (uint)qos, Retain = retain};
+                        var message = new Message()
+                        {
+                            ReceivedAt = DateTime.Now,
+                            Topic = topic,
+                            Payload = payload,
+                            Qos = (uint)qos,
+                            Retain = retain
+                        };
                         await _dbContext.Messages.AddAsync(message);
                         await _dbContext.SaveChangesAsync();
                     }

@@ -12,7 +12,22 @@ services:
     volumes:
       - ./postgresql:/etc/postgresql:ro
 
-  pollutant-rest:
+#  rabbitmq:
+#    image: rabbitmq:3-management-alpine
+#    container_name: rabbitmq
+#    volumes:
+#      - ./rabbitmq/etc/:/etc/rabbitmq/
+#      - ./rabbitmq/data/:/var/lib/rabbitmq/
+#      - ./rabbitmq/logs/:/var/log/rabbitmq/
+#    ports:
+#      - 5672:5672
+#      - 15672:15672
+#    depends_on:
+#      - db
+#    links:
+#      - db
+
+  broker:
     image: hivemq/hivemq4:latest
     ports:
       - 8080:8080

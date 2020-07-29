@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -11,6 +12,10 @@ namespace Database.Models
         [Column("id")]
         [JsonPropertyName("id")]
         public int Id { get; set; }
+
+        [Column("received_at")]
+        [JsonPropertyName("received_at")]
+        public DateTime ReceivedAt { get; set; }
 
         [Column("topic")]
         [JsonPropertyName("topic")]

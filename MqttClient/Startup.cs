@@ -1,11 +1,13 @@
 using System;
+using Client.Extensions;
 using Database.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MqttClient.Extensions;
+using Microsoft.Extensions.Hosting;
+using MqttClient.Helpers;
 using MqttClient.Settings;
 
 namespace MqttClient
@@ -46,20 +48,21 @@ namespace MqttClient
                 CreateCalculationContext(_configuration),
                 ServiceLifetime.Singleton
             );
+            services.AddSingleton<SortSourceByQueryParameterHelper<Message>>();
             services.AddMqttClientHostedService();
-            services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.AddCors();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(options => options
-                .AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-            );
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+            });
         }
 
         private Action<DbContextOptionsBuilder> CreateCalculationContext(IConfiguration configuration)

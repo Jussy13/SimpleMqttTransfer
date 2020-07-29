@@ -364,5 +364,8 @@ Program.exe
 
 .idea/**
 
-.postgresql/
+postgresql/
 
+rabbitmq/
+
+*.conf

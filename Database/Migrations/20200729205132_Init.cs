@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Database.Migrations
@@ -13,6 +14,7 @@ namespace Database.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    received_at = table.Column<DateTime>(nullable: false),
                     topic = table.Column<string>(nullable: true),
                     payload = table.Column<string>(nullable: true),
                     qos = table.Column<long>(nullable: false),
