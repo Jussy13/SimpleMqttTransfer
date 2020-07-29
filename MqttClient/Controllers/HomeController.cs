@@ -1,14 +1,12 @@
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MqttClient.Helpers;
 using MqttClient.Models;
 
 namespace MqttClient.Controllers
 {
+    [Route("Home")]
     public class HomeController : BaseController
     {
         private readonly CalculationContext _dbContext;
@@ -24,7 +22,11 @@ namespace MqttClient.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetMessagesAsync(
+        [Route("")]
+        [Route("messages")]
+        [Route("/messages")]
+        [Route("/")]
+        public IActionResult GetMessages(
             [FromQuery]string topic = null,
             [FromQuery] string sortBy = null,
             [FromQuery] PaginationParameter pagination = null
