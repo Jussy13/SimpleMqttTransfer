@@ -11,6 +11,10 @@ namespace MqttClient.Services
                                           IMqttClientDisconnectedHandler,
                                           IMqttApplicationMessageReceivedHandler
     {
+        Task StartAsync();
+
+        Task StopAsync();
+
         Task PublishAsync(string payload, string topic = "/client", bool retainFlag = false, int qos = 1);
 
         Task SubscribeAsync(string topic, int qos = 1);
