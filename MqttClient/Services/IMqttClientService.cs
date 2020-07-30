@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Receiving;
+using MQTTnet.Protocol;
 
 namespace MqttClient.Services
 {
@@ -15,8 +16,13 @@ namespace MqttClient.Services
 
         Task StopAsync();
 
-        Task PublishAsync(string payload, string topic = "/client", bool retainFlag = false, int qos = 1);
+        Task PublishAsync(
+            string payload,
+            string topic = "/client",
+            bool retainFlag = false,
+            MqttQualityOfServiceLevel qos = MqttQualityOfServiceLevel.AtLeastOnce
+        );
 
-        Task SubscribeAsync(string topic, int qos = 1);
+        Task SubscribeAsync(string topic, MqttQualityOfServiceLevel qos = MqttQualityOfServiceLevel.AtLeastOnce);
     }
 }

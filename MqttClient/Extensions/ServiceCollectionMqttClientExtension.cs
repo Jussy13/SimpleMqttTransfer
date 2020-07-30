@@ -7,7 +7,7 @@ using MQTTnet;
 using MQTTnet.Client.Options;
 using MQTTnet.Extensions.ManagedClient;
 
-namespace Client.Extensions
+namespace MqttClient.Extensions
 {
     public static class ServiceCollectionMqttClientExtension
     {

@@ -5,6 +5,7 @@ using MQTTnet;
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Extensions.ManagedClient;
+using MQTTnet.Protocol;
 
 namespace MqttPublisher.Services
 {
@@ -32,16 +33,17 @@ namespace MqttPublisher.Services
             {
                 try
                 {
-                    string topic = eventArgs.ApplicationMessage.Topic;
-                    if (string.IsNullOrWhiteSpace(topic) == false)
+                    if (string.IsNullOrWhiteSpace(eventArgs.ApplicationMessage.Topic))
                     {
-                        var payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
-                        Console.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
-                        Console.WriteLine($"+ Topic = {eventArgs.ApplicationMessage.Topic}");
-                        Console.WriteLine($"+ Payload = {payload}");
-                        Console.WriteLine($"+ QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel}");
-                        Console.WriteLine($"+ Retain = {eventArgs.ApplicationMessage.Retain}");
+                        return;
                     }
+
+                    var payload = Encoding.UTF8.GetString(eventArgs.ApplicationMessage.Payload);
+                    Console.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
+                    Console.WriteLine($"+ Topic = {eventArgs.ApplicationMessage.Topic}");
+                    Console.WriteLine($"+ Payload = {payload}");
+                    Console.WriteLine($"+ QoS = {eventArgs.ApplicationMessage.QualityOfServiceLevel}");
+                    Console.WriteLine($"+ Retain = {eventArgs.ApplicationMessage.Retain}");
                 }
                 catch (Exception ex)
                 {
@@ -49,16 +51,16 @@ namespace MqttPublisher.Services
                 }
             });
 
-        public async Task HandleConnectedAsync(MqttClientConnectedEventArgs eventArgs)
+        public Task HandleConnectedAsync(MqttClientConnectedEventArgs eventArgs)
         {
             Console.WriteLine("connected");
-            await _mqttClient.SubscribeAsync(
+            return _mqttClient.SubscribeAsync(
                 new MqttTopicFilter[]
             {
                 new MqttTopicFilter()
                 {
                     Topic = "/client",
-                    QualityOfServiceLevel = MQTTnet.Protocol.MqttQualityOfServiceLevel.ExactlyOnce
+                    QualityOfServiceLevel = MqttQualityOfServiceLevel.ExactlyOnce
                 }
             });
         }
@@ -67,31 +69,34 @@ namespace MqttPublisher.Services
             await Task.Run(() => Console.WriteLine("disconnected"));
 
 
-        public async Task StartAsync() => await _mqttClient.StartAsync(_options);
+        public Task StartAsync() => _mqttClient.StartAsync(_options);
 
-        public async Task StopAsync() => await _mqttClient.StopAsync();
+        public Task StopAsync() => _mqttClient.StopAsync();
 
-        public async Task PublishAsync(
+        public Task PublishAsync(
             string payload,
             string topic = "/publisher",
             bool retainFlag = false,
-            int qos = 1
+            MqttQualityOfServiceLevel qos = MqttQualityOfServiceLevel.AtLeastOnce
         ) =>
-            await _mqttClient.PublishAsync(
+            _mqttClient.PublishAsync(
                 new MqttApplicationMessageBuilder()
                     .WithTopic(topic)
                     .WithPayload(payload)
-                    .WithQualityOfServiceLevel((MQTTnet.Protocol.MqttQualityOfServiceLevel)qos)
+                    .WithQualityOfServiceLevel(qos)
                     .WithRetainFlag(retainFlag)
                     .Build()
             );
 
-        public async Task SubscribeAsync(string topic, int qos = 1) =>
-            await _mqttClient.SubscribeAsync(
+        public Task SubscribeAsync(
+            string topic,
+            MqttQualityOfServiceLevel qos = MqttQualityOfServiceLevel.AtLeastOnce
+        ) =>
+            _mqttClient.SubscribeAsync(
                 new MqttTopicFilter()
                 {
                     Topic = topic,
-                    QualityOfServiceLevel = (MQTTnet.Protocol.MqttQualityOfServiceLevel)qos
+                    QualityOfServiceLevel = qos
                 }
             );
     }

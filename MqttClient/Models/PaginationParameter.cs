@@ -1,4 +1,3 @@
-
 namespace MqttClient.Models
 {
     public class PaginationParameter

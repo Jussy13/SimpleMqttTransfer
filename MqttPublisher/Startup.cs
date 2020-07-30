@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MqttPublisher.Extensions;
 using MqttPublisher.Settings;
 
-
 namespace MqttPublisher
 {
     public class Startup

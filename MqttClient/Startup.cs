@@ -1,13 +1,13 @@
 using System;
-using Client.Extensions;
 using Database.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using MqttClient.Extensions;
 using MqttClient.Helpers;
+using MqttClient.Services;
 using MqttClient.Settings;
 
 namespace MqttClient
@@ -49,8 +49,12 @@ namespace MqttClient
                 ServiceLifetime.Singleton
             );
             services.AddSingleton<SortSourceByQueryParameterHelper<Message>>();
-            services.AddMqttClientHostedService();
             services.AddControllers();
+            services.AddHttpClient<HttpTransportService>(c =>
+            {
+                c.BaseAddress = new Uri(_configuration.GetValue<string>("uri"));
+            });
+            services.AddMqttClientHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

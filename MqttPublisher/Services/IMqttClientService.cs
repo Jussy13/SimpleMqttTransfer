@@ -2,6 +2,7 @@
 using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Receiving;
+using MQTTnet.Protocol;
 
 namespace MqttPublisher.Services
 {
@@ -13,8 +14,13 @@ namespace MqttPublisher.Services
 
         Task StopAsync();
 
-        Task PublishAsync(string payload, string topic = "/publisher", bool retainFlag = false, int qos = 1);
+        Task PublishAsync(
+            string payload,
+            string topic = "/publisher",
+            bool retainFlag = false,
+            MqttQualityOfServiceLevel qos = MqttQualityOfServiceLevel.AtLeastOnce
+        );
 
-        Task SubscribeAsync(string topic, int qos);
+        Task SubscribeAsync(string topic, MqttQualityOfServiceLevel qos = MqttQualityOfServiceLevel.AtLeastOnce);
     }
 }
