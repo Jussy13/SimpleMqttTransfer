@@ -28,8 +28,8 @@ namespace MqttPublisher.Services
             _mqttClient.ApplicationMessageReceivedHandler = this;
         }
 
-        public async Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs) =>
-            await Task.Run(() =>
+        public Task HandleApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs eventArgs) =>
+            Task.Run(() =>
             {
                 try
                 {
@@ -65,8 +65,8 @@ namespace MqttPublisher.Services
             });
         }
 
-        public async Task HandleDisconnectedAsync(MqttClientDisconnectedEventArgs eventArgs) =>
-            await Task.Run(() => Console.WriteLine("disconnected"));
+        public Task HandleDisconnectedAsync(MqttClientDisconnectedEventArgs eventArgs) =>
+            Task.Run(() => Console.WriteLine("disconnected"));
 
 
         public Task StartAsync() => _mqttClient.StartAsync(_options);

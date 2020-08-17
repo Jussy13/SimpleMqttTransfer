@@ -52,9 +52,9 @@ namespace MqttClient.Controllers
         [HttpPost]
         [Route("send-message")]
         [Route("/send-message")]
-        public async Task SendMessageToTopic([FromBody] string payload)
+        public Task SendMessageToTopic([FromBody] string payload)
         {
-            await _mqttClient.PublishAsync(payload);
+            return _mqttClient.PublishAsync(payload);
         }
     }
 }

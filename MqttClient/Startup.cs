@@ -52,7 +52,7 @@ namespace MqttClient
             services.AddControllers();
             services.AddHttpClient<HttpTransportService>(c =>
             {
-                c.BaseAddress = new Uri(_configuration.GetValue<string>("uri"));
+                c.BaseAddress = new Uri(_configuration.GetValue<string>("Uri"));
             });
             services.AddMqttClientHostedService();
         }
