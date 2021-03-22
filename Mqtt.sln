@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MqttClient", "MqttClient\Mq
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{A4A1E0F7-9452-4841-85B6-861929302FBB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsModeling", "EventsModeling\EventsModeling.csproj", "{4241103C-B370-46CF-BB06-45A08FF98596}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{A4A1E0F7-9452-4841-85B6-861929302FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4A1E0F7-9452-4841-85B6-861929302FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4A1E0F7-9452-4841-85B6-861929302FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4241103C-B370-46CF-BB06-45A08FF98596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4241103C-B370-46CF-BB06-45A08FF98596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4241103C-B370-46CF-BB06-45A08FF98596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4241103C-B370-46CF-BB06-45A08FF98596}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
