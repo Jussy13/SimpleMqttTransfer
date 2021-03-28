@@ -1,6 +1,8 @@
-using EventsModeling.Events;
+using EventsModeling.Models.Events;
+using EventsModeling.Models.Transactions;
 using EventsModeling.Resources;
 using EventsModeling.Services.Events;
+using EventsModeling.Services.Transactions;
 
 namespace EventsModeling.Services.Handlers
 {
@@ -12,17 +14,23 @@ namespace EventsModeling.Services.Handlers
         {
             var transaction = _transactionCreator.CreateTransactionByType();
 
+            AddStatistics(transaction);
+
             if (ServerResources.IsHandleAllowed(transaction))
             {
-                EventsScheduler.ScheduleEventByTape(EventType.Output, transaction);
                 ServerResources.AllocateForTransaction(transaction);
+                EventsCollector.AddEvent(new OutputEvent(transaction));
             }
             else
-            {
-                EventsQueue.Enqueue(transaction);
-            }
+                TransactionsQueue.Enqueue(transaction);
 
-            EventsScheduler.ScheduleEventByTape(EventType.Input, null);
+            EventsCollector.AddEvent(new InputEvent());
         }
+
+        public void AddStatistics(Transaction transaction)
+            => Executor.ResultsCollector.AddCreatedTransactionResult(transaction.Type);
+
+        public void AddStatistics(IEvent @event)
+        {}
     }
 }

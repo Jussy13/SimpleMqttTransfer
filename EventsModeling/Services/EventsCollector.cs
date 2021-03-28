@@ -1,4 +1,4 @@
-using EventsModeling.Events;
+using EventsModeling.Models.Events;
 
 namespace EventsModeling.Services.Events
 {

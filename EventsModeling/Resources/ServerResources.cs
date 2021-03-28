@@ -1,4 +1,4 @@
-using EventsModeling.Transactions;
+using EventsModeling.Models.Transactions;
 
 namespace EventsModeling.Resources
 {

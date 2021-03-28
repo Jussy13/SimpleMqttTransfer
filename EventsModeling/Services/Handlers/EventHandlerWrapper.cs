@@ -1,5 +1,5 @@
 using System;
-using EventsModeling.Events;
+using EventsModeling.Models.Events;
 
 namespace EventsModeling.Services.Handlers
 {
@@ -18,20 +18,21 @@ namespace EventsModeling.Services.Handlers
             }
 
             Executor.ExecutionTime = @event.FinishedAt;
-            Console.WriteLine($"Event {@event.EventType} (created at {@event.CreatedAt}) (handled at {@event.FinishedAt})"
-                              + $" calc {@event.FinishedAt - @event.CreatedAt}");
 
-            switch (@event.EventType)
+            switch (@event)
             {
-                case EventType.Input:
+                case InputEvent _:
                     _inputEventHandler.HandleEvent(@event);
                     break;
-                case EventType.Output:
+                case OutputEvent _:
                     _outputEventHandler.HandleEvent(@event);
                     break;
                 default:
                     throw new ApplicationException("Incorrect event type");
             }
         }
+
+        public void AddStatistics(IEvent @event)
+        { }
     }
 }

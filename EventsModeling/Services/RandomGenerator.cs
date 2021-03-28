@@ -10,9 +10,7 @@ namespace EventsModeling.Services
         {
             var dSumm = 0.0;
             for (var i = 0; i <= 12; i++)
-            {
                 dSumm += _randGen.NextDouble();
-            }
 
             return Math.Round((mu + sigma * (dSumm - 6)), 3);
         }

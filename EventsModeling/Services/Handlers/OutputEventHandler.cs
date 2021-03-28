@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
-using EventsModeling.Events;
+using EventsModeling.Models.Events;
+using EventsModeling.Models.Transactions;
 using EventsModeling.Resources;
 using EventsModeling.Services.Events;
-using EventsModeling.Transactions;
+using EventsModeling.Services.Transactions;
 
 namespace EventsModeling.Services.Handlers
 {
@@ -14,15 +16,18 @@ namespace EventsModeling.Services.Handlers
                 return;
 
             if (null != @event.Transaction)
+            {
                 ServerResources.Dispose(@event.Transaction);
+                AddStatistics(@event);
+            }
 
             var tempQueue = new Queue<Transaction>();
 
-            while (EventsQueue.TryDequeue(out var transaction))
+            while (TransactionsQueue.TryDequeue(out var transaction))
             {
                 if (ServerResources.IsHandleAllowed(transaction))
                 {
-                    EventsScheduler.ScheduleEventByTape(EventType.Output, transaction);
+                    EventsCollector.AddEvent(new OutputEvent(transaction));
                 }
                 else
                 {
@@ -32,8 +37,15 @@ namespace EventsModeling.Services.Handlers
 
             while (tempQueue.TryDequeue(out var transaction))
             {
-                EventsQueue.Enqueue(transaction);
+                TransactionsQueue.Enqueue(transaction);
             }
+        }
+
+        public void AddStatistics(IEvent @event)
+        {
+            Executor.ResultsCollector.AddHandledTransactionResult(@event.Transaction.Type);
+            Executor.ResultsCollector.AddHandledTransactionResult(@event.Transaction.Type,
+                @event.FinishedAt - @event.CreatedAt);
         }
     }
 }

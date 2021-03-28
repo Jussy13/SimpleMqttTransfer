@@ -1,5 +1,4 @@
-﻿using System;
-using EventsModeling.Settings;
+﻿using EventsModeling.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EventsModeling
@@ -10,9 +9,7 @@ namespace EventsModeling
         {
             var serviceProvider = CreateServiceCollection().BuildServiceProvider();
             var executor = serviceProvider.GetRequiredService<Executor>();
-            var endOfExecution = Executor.ExecutionTime + TimeSpan.FromMinutes(AppSettingsProvider.ModelTime);
-
-            executor.Execute(endOfExecution);
+            executor.Execute();
         }
 
         private static IServiceCollection CreateServiceCollection() => Startup.ConfigureServices();

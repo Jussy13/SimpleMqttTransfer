@@ -1,15 +1,12 @@
 using System;
-using EventsModeling.Transactions;
+using EventsModeling.Models.Transactions;
 
-namespace EventsModeling.Events
+namespace EventsModeling.Models.Events
 {
     public interface IEvent
     {
         DateTime CreatedAt { get; }
         DateTime FinishedAt { get; }
-
-        EventType EventType { get; }
-
         Transaction Transaction { get; }
     }
 }
