@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using EventsModeling.Models.Events;
 using EventsModeling.Models.Transactions;
 using EventsModeling.Resources;
-using EventsModeling.Services.Events;
 using EventsModeling.Services.Transactions;
 
 namespace EventsModeling.Services.Handlers
@@ -26,26 +24,18 @@ namespace EventsModeling.Services.Handlers
             while (TransactionsQueue.TryDequeue(out var transaction))
             {
                 if (ServerResources.IsHandleAllowed(transaction))
-                {
                     EventsCollector.AddEvent(new OutputEvent(transaction));
-                }
                 else
-                {
                     tempQueue.Enqueue(transaction);
-                }
             }
 
             while (tempQueue.TryDequeue(out var transaction))
-            {
                 TransactionsQueue.Enqueue(transaction);
-            }
         }
 
         public void AddStatistics(IEvent @event)
-        {
-            Executor.ResultsCollector.AddHandledTransactionResult(@event.Transaction.Type);
-            Executor.ResultsCollector.AddHandledTransactionResult(@event.Transaction.Type,
-                @event.FinishedAt - @event.CreatedAt);
-        }
+            =>
+                Executor.ResultsCollector.AddHandledTransactionResult(@event.Transaction,
+                    @event.FinishedAt - @event.CreatedAt);
     }
 }

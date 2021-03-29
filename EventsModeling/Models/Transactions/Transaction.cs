@@ -15,7 +15,7 @@ namespace EventsModeling.Models.Transactions
             Type = type;
             var u = settings.Meteo.WindDirectionsSettings.GetCount();
             var s = settings.Meteo.WindSpeedsSettings.GetCount();
-            CalculationTime = AppSettingsProvider.OptimaizedCoeff
+            CalculationTime = settings.OptimaizedCoeff
                 * AppSettingsProvider.OnePointCalcTime
                 * settings.PointsCount
                 * settings.SourcesCount

@@ -7,5 +7,7 @@ namespace EventsModeling.Models.Transactions
         public int SourcesCount { get; set; }
         public int PollutantsCount { get; set; }
         public int FactoriesCount { get; set; }
+
+        public double OptimaizedCoeff { get; set; } = 1.0;
     }
 }

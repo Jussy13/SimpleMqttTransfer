@@ -1,6 +1,6 @@
 using EventsModeling.Models.Events;
 
-namespace EventsModeling.Services.Events
+namespace EventsModeling.Services
 {
     public static class EventsCollector
     {
@@ -9,19 +9,14 @@ namespace EventsModeling.Services.Events
         public static int Count { get; private set; }
         public static bool IsEmpty => Count == 0;
 
-        static EventsCollector()
-        {
-            _head = new Node<IEvent>(null);
-        }
+        static EventsCollector() => _head = new Node<IEvent>(null);
 
         public static void AddEvent(IEvent @event)
         {
             var node = new Node<IEvent>(@event);
 
             if (_head == null)
-            {
                 _head = node;
-            }
             else
             {
                 var cur = _head;

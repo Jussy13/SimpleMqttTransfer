@@ -1,7 +1,6 @@
 using EventsModeling.Models.Events;
 using EventsModeling.Models.Transactions;
 using EventsModeling.Resources;
-using EventsModeling.Services.Events;
 using EventsModeling.Services.Transactions;
 
 namespace EventsModeling.Services.Handlers
@@ -27,8 +26,8 @@ namespace EventsModeling.Services.Handlers
             EventsCollector.AddEvent(new InputEvent());
         }
 
-        public void AddStatistics(Transaction transaction)
-            => Executor.ResultsCollector.AddCreatedTransactionResult(transaction.Type);
+        private void AddStatistics(Transaction transaction)
+            => Executor.ResultsCollector.AddCreatedTransactionResult(transaction);
 
         public void AddStatistics(IEvent @event)
         {}
