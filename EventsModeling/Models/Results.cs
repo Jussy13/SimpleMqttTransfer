@@ -1,5 +1,3 @@
-using System;
-
 namespace EventsModeling.Models
 {
     public class Results
@@ -8,8 +6,8 @@ namespace EventsModeling.Models
         public int RamCount { get; set; }
         public int CreatedTransactionsCount { get; set; }
         public int HandledTransactionCount { get; set; }
-        public TimeSpan AvgTransactionCalcTime { get; set; }
-        public TimeSpan SpendTransactionCalcTime { get; set; }
+        public double AvgTransactionCalcTime { get; set; }
+        public double SpendTransactionCalcTime { get; set; }
         public double CalculationTime { get; set; }
     }
 }

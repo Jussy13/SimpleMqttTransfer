@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using EventsModeling.Models;
 using EventsModeling.Models.Transactions;
 
@@ -33,16 +34,16 @@ namespace EventsModeling.Services
             }
 
             _transactionsResultsByType[transaction.Type].HandledTransactionCount += 1;
-            _transactionsResultsByType[transaction.Type].SpendTransactionCalcTime += time;
+            _transactionsResultsByType[transaction.Type].SpendTransactionCalcTime += time.Seconds;
         }
 
-        public Dictionary<string, Results> GetResults()
+        public IOrderedEnumerable<KeyValuePair<string, Results>> GetResults()
         {
             foreach (var item in _transactionsResultsByType)
                 item.Value.AvgTransactionCalcTime =
                     item.Value.SpendTransactionCalcTime / item.Value.HandledTransactionCount;
 
-            return _transactionsResultsByType;
+            return _transactionsResultsByType.OrderBy(i => i.Key);
         }
 
         public void Clear() => _transactionsResultsByType.Clear();

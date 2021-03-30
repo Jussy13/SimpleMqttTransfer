@@ -20,7 +20,7 @@ namespace EventsModeling.Services
         {
             var workbook = new XLWorkbook();
             var worksheet = workbook.Worksheets.Add("Sample");
-            var raw = 1;
+            var curRaw = 1;
 
             foreach (var set in TransactionHelper.RequiredCoresSets)
             {
@@ -35,7 +35,7 @@ namespace EventsModeling.Services
                 {
                     while (ExecutionTime < endOfExecution)
                         _eventHandler.HandleEvent(EventsCollector.GetEvent());
-                    PrintStatistics(worksheet, ref raw);
+                    PrintStatistics(worksheet, curRaw);
                 }
                 catch (Exception e)
                 {
@@ -46,7 +46,7 @@ namespace EventsModeling.Services
                 ResultsCollector.Clear();
                 EventsCollector.Clear();
                 TransactionsQueue.Clear();
-                raw++;
+                ++curRaw;
             }
             worksheet.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
             worksheet.Style.Alignment.SetVertical(XLAlignmentVerticalValues.Center);
@@ -56,31 +56,42 @@ namespace EventsModeling.Services
             workbook.Dispose();
         }
 
-        private static void PrintStatistics(IXLWorksheet worksheet, ref int raw)
+        private static void PrintStatistics(IXLWorksheet worksheet, int curRaw)
         {
-            worksheet.Cell($"A{raw}").Value = "Name";
-            worksheet.Cell($"B{raw}").Value = "Cores";
-            worksheet.Cell($"C{raw}").Value = "Ram";
-            worksheet.Cell($"D{raw}").Value = "Created";
-            worksheet.Cell($"E{raw}").Value = "Handled";
-            worksheet.Cell($"F{raw}").Value = "Avg-time";
-            worksheet.Cell($"G{raw}").Value = "TimeToCalc";
-            worksheet.Cell($"H{raw}").Value = "Percent";
-            worksheet.Cell($"I{raw}").Value = "Interval";
+            var raw = curRaw;
+            var col = 0;
+            var lastCol = 0;
 
-            raw++;
             foreach (var result in ResultsCollector.GetResults())
             {
-                worksheet.Cell($"A{raw}").Value = result.Key;
-                worksheet.Cell($"B{raw}").Value = result.Value.CoresCount;
-                worksheet.Cell($"C{raw}").Value = result.Value.RamCount;
-                worksheet.Cell($"D{raw}").Value = result.Value.CreatedTransactionsCount;
-                worksheet.Cell($"E{raw}").Value = result.Value.HandledTransactionCount;
-                worksheet.Cell($"F{raw}").Value = result.Value.AvgTransactionCalcTime;
-                worksheet.Cell($"G{raw}").Value = result.Value.CalculationTime;
-                worksheet.Cell($"H{raw}").Value = TransactionHelper.FreqByType[result.Key] * 100.0;
-                worksheet.Cell($"I{raw}").Value = $"M: {AppSettingsProvider.TransactionDelayMean} b: {AppSettingsProvider.TransactionDelaySigma}";
+                if (raw == 1)
+                {
+                    worksheet.Cell(raw, ++col).Value = "Name";
+                    worksheet.Cell(raw, ++col).Value = "Cores";
+                    worksheet.Cell(raw, ++col).Value = "Ram";
+                    worksheet.Cell(raw, ++col).Value = "Created";
+                    worksheet.Cell(raw, ++col).Value = "Handled";
+                    worksheet.Cell(raw, ++col).Value = "Avg-time";
+                    worksheet.Cell(raw, ++col).Value = "TimeToCalc";
+                    worksheet.Cell(raw, ++col).Value = "Percent";
+                    worksheet.Cell(raw, ++col).Value = "Interval";
+                    worksheet.Cell(raw, ++col).Value = "Effective";
+                }
                 raw++;
+                col = lastCol;
+                worksheet.Cell(raw, ++col).Value = result.Key;
+                worksheet.Cell(raw, ++col).Value = result.Value.CoresCount;
+                worksheet.Cell(raw, ++col).Value = result.Value.RamCount;
+                worksheet.Cell(raw, ++col).Value = result.Value.CreatedTransactionsCount;
+                worksheet.Cell(raw, ++col).Value = result.Value.HandledTransactionCount;
+                worksheet.Cell(raw, ++col).Value = result.Value.AvgTransactionCalcTime;
+                worksheet.Cell(raw, ++col).Value = result.Value.CalculationTime;
+                worksheet.Cell(raw, ++col).Value = TransactionHelper.FreqByType[result.Key] * 100.0;
+                worksheet.Cell(raw, ++col).Value = $"M: {AppSettingsProvider.TransactionDelayMean} b: {AppSettingsProvider.TransactionDelaySigma}";
+                worksheet.Cell(raw, ++col).Value = (double) result.Value.HandledTransactionCount / result.Value.CreatedTransactionsCount;
+                raw = curRaw;
+                ++col;
+                lastCol = col;
             }
         }
     }

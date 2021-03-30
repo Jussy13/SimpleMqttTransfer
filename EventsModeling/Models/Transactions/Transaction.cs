@@ -1,4 +1,5 @@
 using System;
+using EventsModeling.Services;
 using EventsModeling.Settings;
 
 namespace EventsModeling.Models.Transactions
@@ -9,6 +10,7 @@ namespace EventsModeling.Models.Transactions
         public int RequiredCoresCount { get; }
         public int RequiredRamCount { get; }
         public double CalculationTime { get; }
+        public DateTime CreatedAt { get; }
 
         public Transaction(string type, TransactionSettings settings, int requiredCoresCount)
         {
@@ -25,6 +27,7 @@ namespace EventsModeling.Models.Transactions
             var ram = Convert.ToInt32((0.063 * settings.SourcesCount + 7) / 1024);
             RequiredRamCount = ram != 0 ? ram : 1;
             RequiredCoresCount = requiredCoresCount;
+            CreatedAt = Executor.ExecutionTime;
         }
     }
 }

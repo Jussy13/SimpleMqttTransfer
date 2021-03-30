@@ -36,6 +36,6 @@ namespace EventsModeling.Services.Handlers
         public void AddStatistics(IEvent @event)
             =>
                 Executor.ResultsCollector.AddHandledTransactionResult(@event.Transaction,
-                    @event.FinishedAt - @event.CreatedAt);
+                    @event.FinishedAt - @event.Transaction.CreatedAt);
     }
 }
