@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ClosedXML.Excel;
 using EventsModeling.Resources;
 using EventsModeling.Services.Handlers;
@@ -35,7 +36,7 @@ namespace EventsModeling.Services
                 {
                     while (ExecutionTime < endOfExecution)
                         _eventHandler.HandleEvent(EventsCollector.GetEvent());
-                    PrintStatistics(worksheet, curRaw);
+                    PrintStatistics(worksheet, curRaw, set);
                 }
                 catch (Exception e)
                 {
@@ -56,11 +57,11 @@ namespace EventsModeling.Services
             workbook.Dispose();
         }
 
-        private static void PrintStatistics(IXLWorksheet worksheet, int curRaw)
+        private static void PrintStatistics(IXLWorksheet worksheet, int curRaw, IEnumerable<int> set)
         {
             var raw = curRaw;
-            var col = 0;
-            var lastCol = 0;
+            var col = 1;
+            var lastCol = 1;
 
             foreach (var result in ResultsCollector.GetResults())
             {
@@ -92,6 +93,16 @@ namespace EventsModeling.Services
                 raw = curRaw;
                 ++col;
                 lastCol = col;
+            }
+
+            if (raw == 1)
+            {
+                worksheet.Cell(1, 1).Value = "Set";
+                worksheet.Cell(2, 1).Value = string.Join('~',set);
+            }
+            else
+            {
+                worksheet.Cell(++raw, 1).Value = string.Join('~',set);
             }
         }
     }

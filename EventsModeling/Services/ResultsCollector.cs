@@ -34,7 +34,7 @@ namespace EventsModeling.Services
             }
 
             _transactionsResultsByType[transaction.Type].HandledTransactionCount += 1;
-            _transactionsResultsByType[transaction.Type].SpendTransactionCalcTime += time.Seconds;
+            _transactionsResultsByType[transaction.Type].SpendTransactionCalcTime += time.TotalSeconds;
         }
 
         public IOrderedEnumerable<KeyValuePair<string, Results>> GetResults()

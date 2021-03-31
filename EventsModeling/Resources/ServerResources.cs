@@ -5,12 +5,12 @@ namespace EventsModeling.Resources
     public static class ServerResources
     {
         private static int _coresCount;
-        private static int _ramCount;
+        private static double _ramCount;
 
         public static void InitServerResources(int coresCount, int ramCount)
         {
             _coresCount = coresCount;
-            _ramCount = ramCount;
+            _ramCount = ramCount * 1024;
         }
 
         public static bool IsHandleAllowed(Transaction transaction)
