@@ -24,7 +24,10 @@ namespace EventsModeling.Services.Handlers
             while (TransactionsQueue.TryDequeue(out var transaction))
             {
                 if (ServerResources.IsHandleAllowed(transaction))
+                {
+                    ServerResources.AllocateForTransaction(transaction);
                     EventsCollector.AddEvent(new OutputEvent(transaction));
+                }
                 else
                     tempQueue.Enqueue(transaction);
             }

@@ -85,7 +85,7 @@ namespace EventsModeling.Services
                 worksheet.Cell(raw, ++col).Value = result.Value.RamCount;
                 worksheet.Cell(raw, ++col).Value = result.Value.CreatedTransactionsCount;
                 worksheet.Cell(raw, ++col).Value = result.Value.HandledTransactionCount;
-                worksheet.Cell(raw, ++col).Value = result.Value.AvgTransactionCalcTime;
+                worksheet.Cell(raw, ++col).Value = double.IsNaN(result.Value.AvgTransactionCalcTime) ? 0 : result.Value.AvgTransactionCalcTime;
                 worksheet.Cell(raw, ++col).Value = result.Value.CalculationTime;
                 worksheet.Cell(raw, ++col).Value = TransactionHelper.FreqByType[result.Key] * 100.0;
                 worksheet.Cell(raw, ++col).Value = $"M: {AppSettingsProvider.TransactionDelayMean} b: {AppSettingsProvider.TransactionDelaySigma}";
